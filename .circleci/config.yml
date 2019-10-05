@@ -30,7 +30,7 @@ jobs:
       #     to: 's3://kde-metrics'
       #     arguments: '--dryrun'
 
-      - run
+      - run:
           name : Test One
           command: > 
           echo "test two"
