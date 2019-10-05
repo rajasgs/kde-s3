@@ -7,22 +7,46 @@
 
 version: 2.1
 
-orbs:
-  aws-cli: circleci/aws-cli@0.1.10
-jobs:
-  aws-cli-example:
-    executor: aws-cli/default
-    steps:
-      - checkout
-      - aws-cli/setup:
-          profile-name: example
-      - run: echo "Run your code here"
+
 workflows:
   version: 2
   aws-cli:
     jobs:
       - aws-cli-example:
           context: aws
+
+    steps:
+      - checkout
+      - run: sudo pip install awscli
+      - run: mkdir bucket && echo "lorum ipsum" > bucket/build_asset.txt && sudo pip install awscli
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "requirements.txt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      this is where the docker setup scripts will need to be run
+     - run:
+         name: install dependencies
+         command: |
+           docker-compose up -d --build
+           . venv/bin/activate
+           pip install -r requirements.txt
+     - run:
+         name: run tests
+         command: |
+           . venv/bin/activate
+           python test.py
+     - store_artifacts:
+         path: test-reports
+         destination: test-reports
+
+
+
+
+
 
 # description: Install the AWS CLI via Pip if not already installed.
 # steps:
