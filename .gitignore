@@ -1,0 +1,16 @@
+**/**/.DS_Store
+**/**/*.pyc
+**/**/.idea
+**/**/node_modules
+**/**/venv
+**/**/logs
+dte-api/src/api/excel_templates/
+dte-api/src/api/helpers/api/
+docker-nginx/docker/var/www/
+**/**/relative_size_output
+dte-www/npm-debug\.log
+.vscode
+dte-worker/src/dte/
+*.log
+out.txt
+*.sql
