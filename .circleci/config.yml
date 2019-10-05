@@ -7,12 +7,22 @@
 
 version: 2.1
 
-description: Install the AWS CLI via Pip if not already installed.
-steps:
-  - run:
-      name: Install AWS CLI
-      command: |
-        echo "Install One"
+orbs:
+  aws-cli: circleci/aws-cli@0.1.10
+jobs:
+  aws-cli-example:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - aws-cli/setup:
+          profile-name: example
+      - run: echo "Run your code here"
+workflows:
+  version: 2
+  aws-cli:
+    jobs:
+      - aws-cli-example:
+          context: aws
 
 # description: Install the AWS CLI via Pip if not already installed.
 # steps:
