@@ -4,7 +4,7 @@
 #
 version: 2.1
 orbs:
-  aws-s3: circleci/aws-s3@1.0.11
+  aws-cli: circleci/aws-cli@x.y
 jobs:
   build:
     docker:
@@ -21,39 +21,42 @@ jobs:
 
     steps:
       - checkout
-      - run: sudo pip install awscli
-      #- run: mkdir bucket && echo "lorum ipsum" > bucket/build_asset.txt
-      - run: mkdir bucket && echo "lorum ipsum" > bucket/build_asset.txt && sudo pip install awscli
-      - run:
-          name: Configure AWS Access Key ID
-          command: >
+
+    # steps:
+    #   - checkout
+    #   - run: sudo pip install awscli
+    #   #- run: mkdir bucket && echo "lorum ipsum" > bucket/build_asset.txt
+    #   - run: mkdir bucket && echo "lorum ipsum" > bucket/build_asset.txt && sudo pip install awscli
+    #   - run:
+    #       name: Configure AWS Access Key ID
+    #       command: >
             
-            aws configure set aws_access_key_id \
+    #         aws configure set aws_access_key_id \
 
-            $AWS_ACCESS_KEY_ID \
+    #         $AWS_ACCESS_KEY_ID \
 
-            echo "Print the value for $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY"
-      - aws-s3/sync:
-          from: bucket
-          to: 's3://kde-metrics/'
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          aws-region: AWS_REGION
-          arguments: |
-            --acl public-read \
-            --cache-control "max-age=86400"
-          overwrite: true
-      - aws-s3/copy:
-          from: bucket/build_asset.txt
-          to: 's3://kde-metrics'
-          arguments: '--dryrun'
+    #         echo "Print the value for $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY"
+    #   - aws-s3/sync:
+    #       from: bucket
+    #       to: 's3://kde-metrics/'
+    #       aws-access-key-id: AWS_ACCESS_KEY_ID
+    #       aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+    #       aws-region: AWS_REGION
+    #       arguments: |
+    #         --acl public-read \
+    #         --cache-control "max-age=86400"
+    #       overwrite: true
+    #   - aws-s3/copy:
+    #       from: bucket/build_asset.txt
+    #       to: 's3://kde-metrics'
+    #       arguments: '--dryrun'
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "requirements.txt" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+    #   # Download and cache dependencies
+    #   - restore_cache:
+    #       keys:
+    #         - v1-dependencies-{{ checksum "requirements.txt" }}
+    #         # fallback to using the latest cache if no exact match is found
+    #         - v1-dependencies-
 
       # this is where the docker setup scripts will need to be run
 #      - run:
