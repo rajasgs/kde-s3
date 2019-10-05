@@ -30,10 +30,7 @@ jobs:
       #     to: 's3://kde-metrics'
       #     arguments: '--dryrun'
 
-      - run:
-          name : Test One
-          command: > 
-          echo "test two"
+      - run: echo "test two"
 
 # version: 2.1
 # orbs:
