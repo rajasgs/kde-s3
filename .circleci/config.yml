@@ -15,6 +15,7 @@ jobs:
     steps:
       - checkout
       - run: mkdir bucket && echo "lorum ipsum" > bucket/build_asset.txt
+      - run: echo 24
       - aws-s3/sync:
           from: bucket
           to: 's3://kde-metrics'
