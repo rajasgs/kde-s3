@@ -21,6 +21,20 @@ jobs:
 
     steps:
       - checkout
+  aws-cli-example:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - aws-cli/setup:
+          profile-name: example
+      - run: echo "Run your code here"
+
+workflows:
+  version: 2
+  aws-cli:
+    jobs:
+      - aws-cli-example:
+          context: aws
 
     # steps:
     #   - checkout
