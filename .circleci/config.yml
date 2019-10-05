@@ -6,22 +6,58 @@
 
 
 version: 2.1
-orbs:
-  aws-cli: circleci/aws-cli@0.1.16
-jobs:
-  aws-cli-example:
-    executor: aws-cli/default
-    steps:
-      - checkout
-      - aws-cli/setup:
-          profile-name: example
-      - run: echo "Run your code here"
-workflows:
-  version: 2
-  aws-cli:
-    jobs:
-      - aws-cli-example:
-          context: aws
+
+description: Install the AWS CLI via Pip if not already installed.
+steps:
+  - run:
+      name: Install AWS CLI
+      command: |
+        if which aws > /dev/null; then
+          echo "The AWS CLI is already installed. Skipping."
+          exit 0
+        fi
+
+        export PIP=$(which pip pip3 | head -1)
+        if [[ -n $PIP ]]; then
+          if which sudo > /dev/null; then
+            sudo $PIP install awscli --upgrade
+          else
+            # This installs the AWS CLI to ~/.local/bin. Make sure that ~/.local/bin is in your $PATH.
+            $PIP install awscli --upgrade --user
+          fi
+        elif [[ $(which unzip curl | wc -l) -eq 2 ]]; then
+          cd
+          curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+          unzip awscli-bundle.zip
+          if which sudo > /dev/null; then
+            sudo ~/awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+          else
+            # This installs the AWS CLI to the default location (~/.local/lib/aws) and create a symbolic link (symlink) at ~/bin/aws. Make sure that ~/bin is in your $PATH.
+            awscli-bundle/install -b ~/bin/aws
+          fi
+          rm -rf awscli-bundle*
+          cd -
+        else
+          echo "Unable to install AWS CLI. Please install pip."
+          exit 1
+        fi
+
+# orbs:
+#   aws-cli: circleci/aws-cli@0.1.16
+# jobs:
+#   aws-cli-example:
+#     executor: aws-cli/default
+#     steps:
+#       - checkout
+#       - aws-cli/setup:
+#           profile-name: example
+#       - run: echo "Run your code here"
+# workflows:
+#   version: 2
+#   aws-cli:
+#     jobs:
+#       - aws-cli-example:
+#           context: aws
 
 # version: 2.1
 # orbs:
