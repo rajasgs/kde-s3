@@ -2,25 +2,12 @@
 #
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
+
+
 version: 2.1
 orbs:
-  aws-cli: circleci/aws-cli@0.1.16
+  aws-cli: circleci/aws-cli@x.y
 jobs:
-  build:
-    docker:
-      # specify the version you desire here
-      # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
-      - image: circleci/python:3.6.1
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
-    working_directory: ~/repo
-
-    steps:
-      - checkout
   aws-cli-example:
     executor: aws-cli/default
     steps:
@@ -28,13 +15,46 @@ jobs:
       - aws-cli/setup:
           profile-name: example
       - run: echo "Run your code here"
-
 workflows:
   version: 2
   aws-cli:
     jobs:
       - aws-cli-example:
           context: aws
+
+# version: 2.1
+# orbs:
+#   aws-cli: circleci/aws-cli@0.1.16
+# jobs:
+#   build:
+#     docker:
+#       # specify the version you desire here
+#       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
+#       - image: circleci/python:3.6.1
+
+#       # Specify service dependencies here if necessary
+#       # CircleCI maintains a library of pre-built images
+#       # documented at https://circleci.com/docs/2.0/circleci-images/
+#       # - image: circleci/postgres:9.4
+
+#     working_directory: ~/repo
+
+#     steps:
+#       - checkout
+#   aws-cli-example:
+#     executor: aws-cli/default
+#     steps:
+#       - checkout
+#       - aws-cli/setup:
+#           profile-name: example
+#       - run: echo "Run your code here"
+
+# workflows:
+#   version: 2
+#   aws-cli:
+#     jobs:
+#       - aws-cli-example:
+#           context: aws
 
     # steps:
     #   - checkout
