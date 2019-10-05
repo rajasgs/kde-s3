@@ -1,6 +1,7 @@
 # Python CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-python/ for more details
+# 
 #
 
 
@@ -16,7 +17,7 @@ jobs:
       - run: mkdir bucket && echo "lorum ipsum" > bucket/build_asset.txt
       - aws-s3/sync:
           from: bucket
-          to: 's3://kde-metrics/prefix'
+          to: 's3://kde-metrics/test'
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           aws-region: AWS_REGION
